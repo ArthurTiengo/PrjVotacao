@@ -1,34 +1,32 @@
-var resultados = {
-  opcao1: 0,
-  opcao2: 0,
-  opcao3: 0
-};
+let votes = {
+        candidato1: 0,
+        candidato2: 0,
+        candidato3: 0
+    };
 
-// Função para registrar o voto
-function votar() {
-  var opcaoSelecionada = document.querySelector('input[name="vote"]:checked');
-  if (opcaoSelecionada) {
-      resultados[opcaoSelecionada.value]++;
-      alert('Voto registrado com sucesso!');
-      limparSelecao();
-  } else {
-      alert('Por favor, selecione uma opção para votar.');
-  }
-}
+    function vote() {
+        const selectedCandidate = document.querySelector('input[name="candidato"]:checked');
+        if (selectedCandidate) {
+            votes[selectedCandidate.value]++;
+        } else {
+            alert("Por favor, selecione um candidato para votar.");
+        }
+    }
 
-// Função para ver os votos
-function verVotos() {
-  var resultadoDiv = document.getElementById('resultado');
-  resultadoDiv.innerHTML = '<h2>Resultados:</h2>';
-  resultadoDiv.innerHTML += '<p>Opção 1: ' + resultados.opcao1 + ' votos</p>';
-  resultadoDiv.innerHTML += '<p>Opção 2: ' + resultados.opcao2 + ' votos</p>';
-  resultadoDiv.innerHTML += '<p>Opção 3: ' + resultados.opcao3 + ' votos</p>';
-}
+    function showResults() {
+        const totalVotes = votes.candidato1 + votes.candidato2 + votes.candidato3;
 
-// Função para limpar a seleção após votar
-function limparSelecao() {
-  var opcoes = document.getElementsByName('vote');
-  for (var i = 0; i < opcoes.length; i++) {
-      opcoes[i].checked = false;
-  }
-}
+        if (totalVotes === 0) {
+            alert("Nenhum voto registrado ainda.");
+            return;
+        }
+
+        document.getElementById('candidate1Result').textContent = `Candidato 1: ${((votes.candidato1 / totalVotes) * 100 || 0).toFixed(2)}%`;
+        document.getElementById('candidate2Result').textContent = `Candidato 2: ${((votes.candidato2 / totalVotes) * 100 || 0).toFixed(2)}%`;
+        document.getElementById('candidate3Result').textContent = `Candidato 3: ${((votes.candidato3 / totalVotes) * 100 || 0).toFixed(2)}%`;
+
+        const winner = Object.keys(votes).reduce((a, b) => votes[a] > votes[b] ? a : b);
+        document.getElementById('winner').textContent = `Vencedor: ${winner.toUpperCase()}`;
+
+        document.getElementById('results').style.display = 'block';
+    }
